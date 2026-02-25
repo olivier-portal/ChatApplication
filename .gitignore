@@ -1,0 +1,25 @@
+# Qt
+build-*/
+*.pro.user
+*.o
+*.obj
+moc_*
+ui_*.h
+qrc_*.cpp
+
+# Binaries
+*.exe
+*.dll
+*.lib
+*.a
+
+# Debug / Release
+debug/
+release/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+
+# Qt Creator
+*.autosave
