@@ -40,7 +40,7 @@
         <widget class="QListWidget" name="lstClients"/>
        </item>
        <item>
-        <widget class="QPushButton" name="btnDiconnectAll">
+        <widget class="QPushButton" name="btnDisconnectAll">
          <property name="text">
           <string>Disconnect All</string>
          </property>

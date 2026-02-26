@@ -21,6 +21,17 @@ void ClientManager::sendMessage(QString message)
     _socket->write(message.toUtf8());
 }
 
+void ClientManager::disconnectFromServer()
+{
+    if (!_socket)
+        return;
+
+    _socket->disconnectFromHost();
+
+    if (_socket->state() != QAbstractSocket::UnconnectedState)
+        _socket->waitForDisconnected(500);
+}
+
 void ClientManager::readyRead()
 {
     auto data = _socket->readAll();

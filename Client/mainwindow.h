@@ -18,11 +18,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void addChatBubble(const QString &msg, bool isMyMessage);
 private slots:
     void on_actionConnect_triggered();
     void dataReceived(QByteArray data);
 
     void on_btnSend_clicked();
+
+    void on_actionDisconnect_triggered();
+
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow *ui;

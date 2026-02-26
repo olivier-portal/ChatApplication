@@ -2,12 +2,23 @@
 #include "ChatItemWidget.h"
 #include "ui_mainwindow.h"
 
+#include <QScrollBar>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->centralwidget->setEnabled(false);
+
+    ui->lstMessages->setSpacing(2);
+    ui->lstMessages->setUniformItemSizes(false);
+    ui->lstMessages->setStyleSheet("QListWidget{padding:0px; margin:0px;}");
+
+    ui->lnMessage->setFocus();
+
+    connect(ui->lnMessage, &QLineEdit::returnPressed,
+            this, &MainWindow::on_btnSend_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -18,12 +29,15 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionConnect_triggered()
 {
     _client = new ClientManager();
+
     connect(_client, &ClientManager::connected, [this](){
         ui->centralwidget->setEnabled(true);
     });
+
     connect(_client, &ClientManager::disconnected, [this](){
         ui->centralwidget->setEnabled(false);
     });
+
     connect(_client, &ClientManager::dataReceived, this, &MainWindow::dataReceived);
 
     _client->connectToServer();
@@ -31,7 +45,7 @@ void MainWindow::on_actionConnect_triggered()
 
 void MainWindow::dataReceived(QByteArray data)
 {
-    const QString msg = data.trimmed();
+    const QString msg = QString::fromUtf8(data).trimmed();
 
     if (msg.startsWith("ID:"))
     {
@@ -44,26 +58,56 @@ void MainWindow::dataReceived(QByteArray data)
         }
     }
 
-    auto chatWidget = new ChatItemWidget(this);
-    chatWidget->setMessage(data);
-    auto listItemWidget = new QListWidgetItem();
-    listItemWidget->setSizeHint(QSize(0, 65));
-    ui->lstMessages->addItem(listItemWidget);
-    ui->lstMessages->setItemWidget(listItemWidget, chatWidget);
+    addChatBubble(msg, false);
 }
-
 
 void MainWindow::on_btnSend_clicked()
 {
-    auto message = ui->lnMessage->text().trimmed();
+    const QString message = ui->lnMessage->text().trimmed();
+    if (message.isEmpty()) return;
+
     _client->sendMessage(message);
-    // ui->lstMessages->addItem(message);
-    ui->lnMessage->setText("");
-    auto chatWidget = new ChatItemWidget(this);
-    chatWidget->setMessage(message, true);
-    auto listItemWidget = new QListWidgetItem();
-    listItemWidget->setSizeHint(QSize(0, 65));
-    ui->lstMessages->addItem(listItemWidget);
-    ui->lstMessages->setItemWidget(listItemWidget, chatWidget);
+    ui->lnMessage->clear();
+
+    addChatBubble(message, true);
 }
 
+void MainWindow::on_actionDisconnect_triggered()
+{
+    if (!_client)
+        return;
+    _client->disconnectFromServer();
+
+    ui->centralwidget->setEnabled(false);
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    if (!_client){
+    _client->disconnectFromServer();
+    _client->deleteLater();
+    _client = nullptr;
+    }
+
+    close();
+}
+
+void MainWindow::addChatBubble(const QString& msg, bool isMyMessage)
+{
+    auto *bar = ui->lstMessages->verticalScrollBar();
+    const bool wasAtBottom = (bar->value() >= bar->maximum() - 5);
+
+    auto *item = new QListWidgetItem(ui->lstMessages);
+
+    auto *w = new ChatItemWidget(ui->lstMessages);
+    w->setMessage(msg, isMyMessage);
+
+    w->layout()->activate();
+    item->setSizeHint(w->sizeHint());
+
+    ui->lstMessages->addItem(item);
+    ui->lstMessages->setItemWidget(item, w);
+
+    if (wasAtBottom)
+        ui->lstMessages->scrollToBottom();
+}

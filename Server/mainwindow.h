@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSet>
+#include <QTcpsocket>
 #include "ServerManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,11 +23,14 @@ public:
 private slots:
     void newClientConnected(QTcpSocket *client);
     void clientDisconnected(QTcpSocket *client);
+    void on_btnDisconnectAll_clicked();
 
 
 private:
     Ui::MainWindow *ui;
     ServerManager *_Server;
+
+    QSet<QTcpSocket*> m_clients;
 
 private: //methods
     void setupServer();

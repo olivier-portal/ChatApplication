@@ -15,7 +15,7 @@ class ChatItemWidget : public QWidget
 public:
     explicit ChatItemWidget(QWidget *parent = nullptr);
     ~ChatItemWidget();
-    void setMessage(QString message, bool isMyMessage = false);
+    void setMessage(const QString& message, bool isMyMessage = false);
 
 private:
     Ui::ChatItemWidget *ui;

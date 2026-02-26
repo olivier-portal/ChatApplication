@@ -11,7 +11,9 @@ public:
     explicit ClientManager(QHostAddress ip = QHostAddress::LocalHost, ushort port = 4500, QObject *parent = nullptr);
     void connectToServer();
     void sendMessage(QString message);
-
+    
+    void disconnectFromServer();
+    void exitWindow();
 signals:
     void connected();
     void disconnected();

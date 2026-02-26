@@ -64,8 +64,10 @@
      <string>Options</string>
     </property>
     <addaction name="actionConnect"/>
-    <addaction name="actionExit"/>
+    <addaction name="actionDisconnect"/>
     <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuOptions"/>
   </widget>
@@ -75,9 +77,14 @@
     <string>Connect</string>
    </property>
   </action>
+  <action name="actionDisconnect">
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>exit</string>
    </property>
   </action>
  </widget>

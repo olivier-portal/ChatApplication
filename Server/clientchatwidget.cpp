@@ -9,6 +9,11 @@ ClientChatWidget::ClientChatWidget(QTcpSocket *client, QWidget *parent)
     ui->setupUi(this);
     connect(_client, &QTcpSocket::readyRead, this, &ClientChatWidget::dataReceived);
     connect(_client, &QTcpSocket::disconnected, this, &ClientChatWidget::clientDisconnected);
+
+    ui->lnMessage->setFocus();
+
+    connect(ui->lnMessage, &QLineEdit::returnPressed,
+            this, &ClientChatWidget::on_btnSend_clicked);
 }
 
 ClientChatWidget::~ClientChatWidget()
