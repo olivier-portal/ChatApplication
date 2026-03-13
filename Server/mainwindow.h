@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QSet>
-#include <QTcpsocket>
+#include <QTcpSocket>
 #include "ServerManager.h"
 
 QT_BEGIN_NAMESPACE
