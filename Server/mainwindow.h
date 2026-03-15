@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSet>
 #include <QTcpSocket>
+#include <QInputDialog>
 #include "ServerManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,6 +26,8 @@ private slots:
     void clientDisconnected(QTcpSocket *client);
     void on_btnDisconnectAll_clicked();
 
+
+    void on_btnBroadcast_clicked();
 
 private:
     Ui::MainWindow *ui;

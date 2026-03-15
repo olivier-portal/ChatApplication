@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>676</width>
-    <height>341</height>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Server</string>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LayoutDirection::LeftToRight</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,1">
@@ -40,6 +43,13 @@
         <widget class="QListWidget" name="lstClients"/>
        </item>
        <item>
+        <widget class="QPushButton" name="btnBroadcast">
+         <property name="text">
+          <string>Broadcast</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnDisconnectAll">
          <property name="text">
           <string>Disconnect All</string>
@@ -57,7 +67,7 @@
      <x>0</x>
      <y>0</y>
      <width>676</width>
-     <height>17</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

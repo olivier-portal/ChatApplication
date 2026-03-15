@@ -64,3 +64,18 @@ void MainWindow::setupServer()
     connect(_Server, &ServerManager::newClientConnected, this, &MainWindow::newClientConnected);
     connect(_Server, &ServerManager::clientDisconnected, this, &MainWindow::clientDisconnected);
 }
+
+void MainWindow::on_btnBroadcast_clicked()
+{
+    bool ok;
+    QString message = QInputDialog::getText(this,"Broadcast","Enter message to send to ALL clients", QLineEdit::Normal, "", &ok);
+
+    if(ok == true && !message.isEmpty()){
+        for (QTcpSocket* client: m_clients){
+            client->write(message.toUtf8());
+        }
+    }
+
+
+}
+
