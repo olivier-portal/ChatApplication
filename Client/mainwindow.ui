@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>355</height>
+    <width>570</width>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Client</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
@@ -24,29 +24,58 @@
        <item>
         <widget class="QListWidget" name="lstMessages"/>
        </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Message:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lnMessage"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnSend">
+           <property name="text">
+            <string>Send</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Message:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lnMessage"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnSend">
-        <property name="text">
-         <string>Send</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QGroupBox" name="grpClients">
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QListWidget" name="lstClients"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnStartChat">
+         <property name="text">
+          <string>Open Chat</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnEndChat">
+         <property name="text">
+          <string>Close Chat</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -55,8 +84,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>567</width>
-     <height>17</height>
+     <width>570</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
