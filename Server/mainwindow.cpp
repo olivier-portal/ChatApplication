@@ -17,14 +17,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::newClientConnected(QTcpSocket *client)
 {
-    m_clients.insert(client);
+    auto id = client->property("id").toInt();
+    m_clients.insert(QString::number(id), client);
 
-    connect(client, &QTcpSocket::disconnected, this, [this, client](){
-        m_clients.remove(client);
+    connect(client, &QTcpSocket::disconnected, this, [this, client, id](){
+        m_clients.remove(QString::number(id));
         client->deleteLater();
     });
 
-    auto id = client->property("id").toInt();
+
     ui->lstClients->addItem(QString("New Client added: %1").arg(id));
     auto chatWidget = new ClientChatWidget(client);
     ui->tbChats->addTab(chatWidget, QString("client(%1)").arg(id));
@@ -71,7 +72,10 @@ void MainWindow::on_btnBroadcast_clicked()
     QString message = QInputDialog::getText(this,"Broadcast","Enter message to send to ALL clients", QLineEdit::Normal, "", &ok); // open the dialog containing the text box and ok button
 
     if(ok == true && !message.isEmpty()){           // if the user clicks on broadcast while having something in the text box
-        for (QTcpSocket* client: m_clients){        // loop through the clients
+
+        QList<QTcpSocket*> clientList = m_clients.values();
+
+        for (QTcpSocket* client: clientList){        // loop through the clients
             client->write(message.toUtf8());        // write in the socket of each client
         }
     }

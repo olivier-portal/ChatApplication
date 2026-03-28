@@ -36,7 +36,7 @@ private:
     Ui::MainWindow *ui;
     ServerManager *_Server;
 
-    QSet<QTcpSocket*> m_clients;
+    QMap<QString,QTcpSocket*> m_clients;
 
 private: //methods
     void setupServer();
