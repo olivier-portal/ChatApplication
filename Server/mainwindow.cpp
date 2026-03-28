@@ -67,12 +67,12 @@ void MainWindow::setupServer()
 
 void MainWindow::on_btnBroadcast_clicked()
 {
-    bool ok;
-    QString message = QInputDialog::getText(this,"Broadcast","Enter message to send to ALL clients", QLineEdit::Normal, "", &ok);
+    bool ok; // create a boolean to see if the ok button was clicked
+    QString message = QInputDialog::getText(this,"Broadcast","Enter message to send to ALL clients", QLineEdit::Normal, "", &ok); // open the dialog containing the text box and ok button
 
-    if(ok == true && !message.isEmpty()){
-        for (QTcpSocket* client: m_clients){
-            client->write(message.toUtf8());
+    if(ok == true && !message.isEmpty()){           // if the user clicks on broadcast while having something in the text box
+        for (QTcpSocket* client: m_clients){        // loop through the clients
+            client->write(message.toUtf8());        // write in the socket of each client
         }
     }
 
