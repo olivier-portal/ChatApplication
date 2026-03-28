@@ -23,6 +23,9 @@ private slots:
 
     void clientDisconnected();
 
+signals:
+    void messageReceived(QString message);
+
 private:
     Ui::ClientChatWidget *ui;
     QTcpSocket *_client;

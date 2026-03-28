@@ -25,6 +25,7 @@ void ClientChatWidget::dataReceived()
 {
     auto data = _client->readAll();
     ui->lstMessages->addItem(data);
+    emit messageReceived(QString(data));
 }
 
 void ClientChatWidget::on_btnSend_clicked()
