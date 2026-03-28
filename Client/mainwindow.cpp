@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "ChatItemWidget.h"
 #include "ui_mainwindow.h"
 
 #include <QScrollBar>
@@ -10,15 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->centralwidget->setEnabled(false);
-
-    ui->lstMessages->setSpacing(2);
-    ui->lstMessages->setUniformItemSizes(false);
-    ui->lstMessages->setStyleSheet("QListWidget{padding:0px; margin:0px;}");
-
-    ui->lnMessage->setFocus();
-
-    connect(ui->lnMessage, &QLineEdit::returnPressed,
-            this, &MainWindow::on_btnSend_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -58,19 +48,18 @@ void MainWindow::dataReceived(QByteArray data)
         }
     }
 
-    addChatBubble(msg, false);
+    else if(msg.startsWith("FROM:"))
+    {
+        QStringList splitMsg = msg.mid(5).split(":");
+
+
+        if (m_chats.contains(splitMsg[0])){
+            m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+        }
+
+    }
 }
 
-void MainWindow::on_btnSend_clicked()
-{
-    const QString message = ui->lnMessage->text().trimmed();
-    if (message.isEmpty()) return;
-
-    _client->sendMessage(message);
-    ui->lnMessage->clear();
-
-    addChatBubble(message, true);
-}
 
 void MainWindow::on_actionDisconnect_triggered()
 {
@@ -92,22 +81,42 @@ void MainWindow::on_actionExit_triggered()
     close();
 }
 
-void MainWindow::addChatBubble(const QString& msg, bool isMyMessage)
+
+void MainWindow::on_btnStartChat_clicked()
 {
-    auto *bar = ui->lstMessages->verticalScrollBar();
-    const bool wasAtBottom = (bar->value() >= bar->maximum() - 5);
+    QListWidgetItem* client = ui->lstClients->currentItem();
+    if(client !=nullptr){
 
-    auto *item = new QListWidgetItem(ui->lstMessages);
+        ClientChatWidget* chatWidget = new ClientChatWidget(QString(client->text()));
 
-    auto *w = new ChatItemWidget(ui->lstMessages);
-    w->setMessage(msg, isMyMessage);
+        ui->tbChats->addTab(chatWidget, client->text());
 
-    w->layout()->activate();
-    item->setSizeHint(w->sizeHint());
+        m_chats.insert(client->text(), chatWidget);
 
-    ui->lstMessages->addItem(item);
-    ui->lstMessages->setItemWidget(item, w);
 
-    if (wasAtBottom)
-        ui->lstMessages->scrollToBottom();
+
+        connect(chatWidget, &ClientChatWidget::messageRequested, this, [this](QString target, QString message){
+            _client->sendMessage(target + ":" + message);
+        });
+    }
 }
+
+
+void MainWindow::on_btnEndChat_clicked()
+{
+    int tbIndex = ui->tbChats->currentIndex();
+
+    if (tbIndex == -1) return;
+
+    QString tbText = ui->tbChats->tabText(tbIndex);
+    QWidget* currentTab = ui->tbChats->currentWidget();
+
+    m_chats.remove(tbText);
+
+    ui->tbChats->removeTab(tbIndex);
+
+    delete currentTab;
+
+
+}
+

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "clientmanager.h"
+#include <clientchatwidget.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,13 +18,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-    void addChatBubble(const QString &msg, bool isMyMessage);
 private slots:
     void on_actionConnect_triggered();
     void dataReceived(QByteArray data);
 
-    void on_btnSend_clicked();
+    void on_btnStartChat_clicked();
+
+    void on_btnEndChat_clicked();
 
     void on_actionDisconnect_triggered();
 
@@ -32,5 +33,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     ClientManager *_client;
+
+    QMap<QString, ClientChatWidget* > m_chats;
 };
 #endif // MAINWINDOW_H

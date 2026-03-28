@@ -19,6 +19,7 @@ signals:
     void disconnected();
     void dataReceived(QByteArray data);
 
+
 private slots:
     void readyRead();
 
