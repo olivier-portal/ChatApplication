@@ -6,7 +6,7 @@
 #include <QTcpSocket>
 #include <QInputDialog>
 #include "ServerManager.h"
-#include "qlistwidget.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +30,7 @@ private slots:
 
     void on_btnBroadcast_clicked();
 
-    void on_lstClients_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+    void routeMessage(QString senderId, QString message);
 
 private:
     Ui::MainWindow *ui;

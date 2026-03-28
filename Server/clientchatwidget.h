@@ -24,7 +24,7 @@ private slots:
     void clientDisconnected();
 
 signals:
-    void messageReceived(QString message);
+    void messageReceived(QString id,QString message);
 
 private:
     Ui::ClientChatWidget *ui;

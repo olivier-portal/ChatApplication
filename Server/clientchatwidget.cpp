@@ -23,9 +23,10 @@ ClientChatWidget::~ClientChatWidget()
 
 void ClientChatWidget::dataReceived()
 {
+    QString id = QString::number(_client->property("id").toInt());
     auto data = _client->readAll();
     ui->lstMessages->addItem(data);
-    emit messageReceived(QString(data));
+    emit messageReceived(id, QString(data));
 }
 
 void ClientChatWidget::on_btnSend_clicked()
@@ -38,4 +39,3 @@ void ClientChatWidget::clientDisconnected()
 {
     ui->wdgSend->setEnabled(false);
 }
-

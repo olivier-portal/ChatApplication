@@ -30,8 +30,20 @@ void MainWindow::newClientConnected(QTcpSocket *client)
     auto chatWidget = new ClientChatWidget(client);
     ui->tbChats->addTab(chatWidget, QString("client(%1)").arg(id));
 
+    connect(chatWidget, &ClientChatWidget::messageReceived, this, &MainWindow::routeMessage);
+
     //send Id to client
     client->write(QString("ID:%1").arg(id).toUtf8());
+
+    QList<QTcpSocket*> clientList = m_clients.values();
+
+    QList clientIds = m_clients.keys();
+
+    QString clientListToBroadcast = "CLIENTS:"+clientIds.join("|");
+
+    for (QTcpSocket* client : clientList){
+        client->write(clientListToBroadcast.toUtf8());
+    }
 }
 
 void MainWindow::clientDisconnected(QTcpSocket *client)
@@ -81,5 +93,14 @@ void MainWindow::on_btnBroadcast_clicked()
     }
 
 
+}
+
+
+
+void MainWindow::routeMessage(QString senderId, QString message)
+{
+    QList splitMsg = message.split(":");
+
+    m_clients[splitMsg[0]]->write(("FROM:"+senderId+":"+splitMsg[1]).toUtf8());
 }
 
