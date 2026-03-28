@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -32,8 +33,7 @@ void MainWindow::newClientConnected(QTcpSocket *client)
 
     connect(chatWidget, &ClientChatWidget::messageReceived, this, &MainWindow::routeMessage);
 
-    //send Id to client
-    client->write(QString("ID:%1").arg(id).toUtf8());
+
 
     QList<QTcpSocket*> clientList = m_clients.values();
 
@@ -41,8 +41,12 @@ void MainWindow::newClientConnected(QTcpSocket *client)
 
     QString clientListToBroadcast = "CLIENTS:"+clientIds.join("|");
 
+
+    client->write(QString("ID:%1").arg(id).toUtf8()+"\n");
+
+
     for (QTcpSocket* client : clientList){
-        client->write(clientListToBroadcast.toUtf8());
+        client->write(clientListToBroadcast.toUtf8()+"\n");
     }
 }
 
@@ -88,7 +92,7 @@ void MainWindow::on_btnBroadcast_clicked()
         QList<QTcpSocket*> clientList = m_clients.values();
 
         for (QTcpSocket* client: clientList){        // loop through the clients
-            client->write(message.toUtf8());        // write in the socket of each client
+            client->write(message.toUtf8()+"\n");        // write in the socket of each client
         }
     }
 
@@ -101,6 +105,6 @@ void MainWindow::routeMessage(QString senderId, QString message)
 {
     QList splitMsg = message.split(":");
 
-    m_clients[splitMsg[0]]->write(("FROM:"+senderId+":"+splitMsg[1]).toUtf8());
+    m_clients[splitMsg[0]]->write(("FROM:"+senderId+":"+splitMsg[1]).toUtf8()+"\n");
 }
 

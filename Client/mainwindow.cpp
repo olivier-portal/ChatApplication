@@ -35,28 +35,46 @@ void MainWindow::on_actionConnect_triggered()
 
 void MainWindow::dataReceived(QByteArray data)
 {
-    const QString msg = QString::fromUtf8(data).trimmed();
 
-    if (msg.startsWith("ID:"))
-    {
-        bool ok = false;
-        int id = msg.mid(3).toInt(&ok);
-        if (ok)
+    qDebug()<<data;
+    const QStringList messages = QString::fromUtf8(data).trimmed().split("\n");
+    // const QString msg = QString::fromUtf8(data).trimmed();
+
+    for (const QString& message : messages){
+    if (message.startsWith("ID:"))
         {
-            this->setWindowTitle(QString("Client (%1)").arg(id));
-            return;
-        }
-    }
-
-    else if(msg.startsWith("FROM:"))
-    {
-        QStringList splitMsg = msg.mid(5).split(":");
-
-
-        if (m_chats.contains(splitMsg[0])){
-            m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+            bool ok = false;
+            int id = message.mid(3).toInt(&ok);
+            if (ok)
+            {
+                this->setWindowTitle(QString("Client (%1)").arg(id));
+                continue;
+            }
         }
 
+        else if(message.startsWith("FROM:"))
+        {
+            QStringList splitMsg = message.mid(5).split(":");
+
+
+            if (m_chats.contains(splitMsg[0])){
+                m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+            }
+
+        }
+
+        else if(message.startsWith("CLIENTS:"))
+        {
+
+            const QStringList splitClients = message.mid(8).split("|");
+            ui->lstClients->clear();
+
+            for (const QString& clientReceived : splitClients){
+                ui->lstClients->addItem(clientReceived);
+
+            }
+
+        }
     }
 }
 
