@@ -18,6 +18,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionConnect_triggered()
 {
+    if (_client) return;
+
     _client = new ClientManager();
 
     connect(_client, &ClientManager::connected, [this](){
@@ -69,7 +71,7 @@ void MainWindow::dataReceived(QByteArray data)
 
 
             }
-            m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+            m_chats[splitMsg[0]]->appendMessage(splitMsg[1], false);
 
 
 
@@ -98,12 +100,15 @@ void MainWindow::on_actionDisconnect_triggered()
         return;
     _client->disconnectFromServer();
 
+    _client->deleteLater();
+    _client = nullptr;
+
     ui->centralwidget->setEnabled(false);
 }
 
 void MainWindow::on_actionExit_triggered()
 {
-    if (!_client){
+    if (_client){
     _client->disconnectFromServer();
     _client->deleteLater();
     _client = nullptr;

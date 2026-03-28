@@ -25,11 +25,24 @@ ClientChatWidget::~ClientChatWidget()
 void ClientChatWidget::on_btnSend_clicked()
 {
     //_client->write(ui->lnMessage->text().trimmed().toUtf8());
-    emit messageRequested(msgTarget,ui->lnMessage->text().trimmed());
+    QString message = ui->lnMessage->text().trimmed();
+    emit messageRequested(msgTarget,message);
+    appendMessage(message, true);
     ui->lnMessage->setText("");
 }
 
-void ClientChatWidget::appendMessage(QString message){
-    ui->lstMessages->addItem(message);
+void ClientChatWidget::appendMessage(QString message, bool isMyMsg){
+
+    auto item  = new QListWidgetItem(ui->lstMessages);
+
+    ChatItemWidget* bubble = new ChatItemWidget(this);
+
+    bubble->setMessage(message, isMyMsg);
+
+    item->setSizeHint(bubble->sizeHint());
+
+    ui->lstMessages->setItemWidget(item, bubble);
+
+    // ui->lstMessages->addItem(message);
 }
 

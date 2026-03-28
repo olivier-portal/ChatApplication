@@ -2,6 +2,7 @@
 #define CLIENTCHATWIDGET_H
 
 #include <QWidget>
+#include "ChatItemWidget.h"
 
 
 namespace Ui {
@@ -19,8 +20,9 @@ public:
     /**
      * @brief append messages to the widget's message list
      * @param message message to be appended
+     * @param isMyMsg if the message is sent by the client = true if the message is received = false
      */
-    void appendMessage(QString message);
+    void appendMessage(QString message, bool isMyMsg);
 
 private slots:
     void on_btnSend_clicked();

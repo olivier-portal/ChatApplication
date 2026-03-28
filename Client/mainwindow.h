@@ -32,7 +32,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    ClientManager *_client;
+    ClientManager *_client = {nullptr};
 
     QMap<QString, ClientChatWidget* > m_chats;
 };
