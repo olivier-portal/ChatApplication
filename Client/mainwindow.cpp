@@ -57,9 +57,22 @@ void MainWindow::dataReceived(QByteArray data)
             QStringList splitMsg = message.mid(5).split(":");
 
 
-            if (m_chats.contains(splitMsg[0])){
-                m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+            if (!m_chats.contains(splitMsg[0])){
+
+                ClientChatWidget* chatWidget = new ClientChatWidget(QString(splitMsg[0]));
+                ui->tbChats->addTab(chatWidget, splitMsg[0]);
+                m_chats.insert(splitMsg[0], chatWidget);
+
+                connect(chatWidget, &ClientChatWidget::messageRequested, this, [this](QString target, QString message){
+                    _client->sendMessage(target + ":" + message);
+                });
+
+
             }
+            m_chats[splitMsg[0]]->appendMessage(splitMsg[1]);
+
+
+
 
         }
 
