@@ -12,16 +12,19 @@ SOURCES += \
     ChatItemWidget.cpp \
     clientmanager.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    clientchatwidget.cpp
 
 HEADERS += \
     ChatItemWidget.h \
     clientmanager.h \
-    mainwindow.h
+    mainwindow.h \
+    clientchatwidget.h
 
 FORMS += \
     ChatItemWidget.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    clientchatwidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
