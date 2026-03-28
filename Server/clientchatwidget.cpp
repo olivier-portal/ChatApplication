@@ -31,7 +31,7 @@ void ClientChatWidget::dataReceived()
 
 void ClientChatWidget::on_btnSend_clicked()
 {
-    _client->write(ui->lnMessage->text().trimmed().toUtf8());
+    _client->write("FROM:0:"+ui->lnMessage->text().trimmed().toUtf8()+"\n");
     ui->lnMessage->setText("");
 }
 

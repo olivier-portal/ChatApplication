@@ -92,7 +92,7 @@ void MainWindow::on_btnBroadcast_clicked()
         QList<QTcpSocket*> clientList = m_clients.values();
 
         for (QTcpSocket* client: clientList){        // loop through the clients
-            client->write(message.toUtf8()+"\n");        // write in the socket of each client
+            client->write("FROM:0:"+message.toUtf8()+"\n");        // write in the socket of each client
         }
     }
 
